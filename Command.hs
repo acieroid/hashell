@@ -3,6 +3,7 @@ module Command where
 import System.Cmd
 import System.Exit
 import System.Directory
+import List
 
 type InternalCommand = (String, String -> IO ())
 
@@ -35,15 +36,21 @@ isInternalCommand s = helper' internalCommands
 
 exec :: String -> IO ()
 exec cmd = do
-  exitCode <- rawSystem (head c) (tail c)
+  exitCode <- rawSystem (head c) $ parseArgs (tail c)
   case exitCode of 
     ExitSuccess -> return ()
-    ExitFailure 2 -> error ("la commande `" ++ cmd ++ "` a retourné 1")
+    ExitFailure 1 -> error ("la commande `" ++ cmd ++ "` a retourné 1")
+    ExitFailure 2 -> error ("la commande `" ++ cmd ++ "` a retourné 2")
     ExitFailure 126 -> error ("impossible d'éxécuter la commande `" ++ cmd ++ "`(vérifiez les droits)")
     ExitFailure 127 -> error ("commande `" ++ cmd ++ "` non trouvée")
     ExitFailure 130 -> error ("Control-C")
     ExitFailure x -> error ("code d'erreur " ++ (show x) ++ " inconnu pour la commande `" ++ cmd ++ "`")
   where c = split cmd ' '
+
+parseArgs :: [String] -> [String]
+parseArgs [] = []
+parseArgs ("":xs) = parseArgs xs
+parseArgs (x:xs) = x:(parseArgs xs)
 
 -- Commandes internes 
 
