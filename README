@@ -1,0 +1,8 @@
+hashell
+=======
+
+Compilation
+===========
+To compile hashell, you must have GHC (>= 6.10, tested with GHC 6.10.1).
+Run `runhaskell Setup.hs configure` and then `runhaskell Setup.hs buid`.
+Then launch dist/build/hash/hash and use it like any shell :)

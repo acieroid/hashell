@@ -1,0 +1,13 @@
+Name:             hashell
+version:          0.0
+Description :     hashell is a simple shell made with haskell
+License:          GPL
+License-file:     LICENSE
+Author:           Quentin Stievenart
+Maintainer:        quentin.stievenart@gmail.com
+Build-Type:        Simple
+Cabal-Version:    >=1.2
+
+Executable hash
+  Main-is:        Main.hs
+  Build-Depends:  base,directory,process,haskell98
