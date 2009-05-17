@@ -4,8 +4,8 @@ Description :     hashell is a simple shell made with haskell
 License:          GPL
 License-file:     LICENSE
 Author:           Quentin Stievenart
-Maintainer:        quentin.stievenart@gmail.com
-Build-Type:        Simple
+Maintainer:       quentin.stievenart@gmail.com
+Build-Type:       Simple
 Cabal-Version:    >=1.2
 
 Executable hash
