@@ -5,6 +5,15 @@ import System.Exit
 import System.Directory
 import List
 
+-- A cammand, can be builtin or not
+data Command = Builtin BuiltinCommand | External String
+
+-- Run a command in a environment
+runCommand :: Env -> Command -> [String] -> IO ()
+runCommand _ (Builtin cmd) args = (snd cmd) (foldl (++) "" args)
+runCommand e (External cmd) args = rawSystem e cmd args >> return ()
+
+{-
 type InternalCommand = (String, String -> IO ())
 
 --intenalCommands :: [InternalCommand]
@@ -82,4 +91,4 @@ replace s find repl =
     if take (length find) s == find
         then repl ++ (replace (drop (length find) s) find repl)
         else [head s] ++ (replace (tail s) find repl)
-
+-}
