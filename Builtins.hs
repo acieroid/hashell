@@ -1,14 +1,16 @@
 module Builtins where 
 
+import Control.Monad.Error
+import Errors
 import System.Directory
 import System.Cmd
 import System.Posix.Env
 
 -- A builtincommand, like cd, ...
-type BuiltinCommand = (String, String -> IO ())
+type BuiltinCommand = String -> IO (ThrowsError ())
 
 -- List of the buitins commands
-builtinsCommands :: [BuiltinCommand]
+builtinsCommands :: [(String, BuiltinCommand)]
 builtinsCommands = [("cd", cd)]
 
 -- Set a variable
@@ -31,18 +33,19 @@ updatePwd :: IO ()
 updatePwd = setVar "PWD" =<< getCurrentDirectory
 
 -- change directory
-cd :: String -> IO ()
+cd :: BuiltinCommand
 cd arg | arg == "" = updateOldPwd >> 
                        (setCurrentDirectory =<< getHomeDirectory) >>
-                       updatePwd 
+                       updatePwd >> return (Right ())
        | arg == "-" = do 
                         newPwd <- getVar "OLDPWD" 
                         updateOldPwd 
                         setCurrentDirectory newPwd
-                        updatePwd 
+                        updatePwd
+                        return (Right ())
        | otherwise = do
                       updateOldPwd 
                       b <- doesDirectoryExist arg
                       if b 
-                        then setCurrentDirectory arg >> updatePwd
-                        else error ("Le dossier " ++ arg ++ " n'existe pas")
+                        then setCurrentDirectory arg >> updatePwd >> return (Right ())
+                        else return $ throwError $ GeneralError  "hoho" 
