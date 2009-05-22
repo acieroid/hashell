@@ -1,17 +1,24 @@
 module Main where
 
 import Prompt
+import Parser
 import Command
-import Control.OldException
 import System
 import IO
+import Control.Monad.Error
 
 main = do 
   args <- getArgs
   let prompt = length args == 0
   cmd <- content args
-  handle (\e -> putStrLn  $ "hashell: erreur: " ++ 
-          (show e)) (runCommand (parseCommand cmd) >> return ())
+  x <- parseCmd cmd 
+  case x of 
+    Right c -> do y <- runShellExpr 
+                  case y of
+                    Right _ -> putStrLn "ok"
+                    Left e -> putStrLn $ show e
+    Left e -> putStrLn $ show e
+
   if prompt then main else return ()
   where content args | (length args) == 0 = runPrompt
                      | otherwise = openFile (args !! 0) 

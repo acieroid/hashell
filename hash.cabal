@@ -10,4 +10,4 @@ Cabal-Version:    >=1.2
 
 Executable hash
   Main-is:        Main.hs
-  Build-Depends:  base,directory,process,haskell98
+  Build-Depends:  base,directory,process,haskell98,mtl,unix,parsec

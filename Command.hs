@@ -27,6 +27,6 @@ runCommand (External cmd) args = do
     ExitFailure n -> return $ throwError $ ReturnCode cmd n
 
 -- Run a shell expression
-runShellExpr :: ShellExpr -> IO (ThrowsError ())
+runShellExpr :: ShellExpr -> IO (ThrowsError ())
 runShellExpr (Cmd cmd args) = runCommand cmd args
 

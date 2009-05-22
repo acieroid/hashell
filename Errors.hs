@@ -6,6 +6,7 @@ import Control.Monad.Error
 data ShellError = GeneralError String 
                 | ReturnCode String Int
                 | DirectoryNotFound String
+                | ParserError String
 
 type ThrowsError = Either ShellError
 
@@ -20,6 +21,7 @@ instance Show ShellError where
 showError :: ShellError -> String
 showError (GeneralError s) = s
 showError (DirectoryNotFound d) = d ++ ": directory not found"
+showError (ParserError e) = "parse error :" ++ e
 showError (ReturnCode cmd n) = case n of
   1 -> cmd ++ " returned 1"
   2 -> cmd ++ ": error"
