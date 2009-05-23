@@ -13,9 +13,9 @@ main = do
   cmd <- content args
   x <- parseCmd cmd 
   case x of 
-    Right c -> do y <- runShellExpr 
+    Right c -> do y <- runShellExpr c
                   case y of
-                    Right _ -> putStrLn "ok"
+                    Right _ -> return ()
                     Left e -> putStrLn $ show e
     Left e -> putStrLn $ show e
 

@@ -30,3 +30,9 @@ runCommand (External cmd) args = do
 runShellExpr :: ShellExpr -> IO (ThrowsError ())
 runShellExpr (Cmd cmd args) = runCommand cmd args
 
+-- Return a ShellExpr (Cmd) from a command and the args 
+command :: String -> [String] -> ShellExpr
+command cmd args = case lookup cmd builtinsCommands of
+                     Just builtin -> Cmd (Builtin builtin) args
+                     Nothing -> Cmd (External cmd) args
+
